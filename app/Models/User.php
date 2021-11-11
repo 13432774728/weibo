@@ -34,7 +34,7 @@ class User extends Authenticatable{
 
     public static function boot(){
         parent::boot();
-        
+
         static::creating(function ($user) {
             $user->activation_token = Str::random(10);
         });
@@ -55,9 +55,15 @@ class User extends Authenticatable{
     return " https://gravatar.zeruns.tech/avatar/$hash?s=$size";
     // return "http://www.gravatar.com/avatar/$hash?s=$size";
     }
-    
+
     public function statuses()
     {
     return $this->hasMany(Status::class);
-    }
+    }
+    
+    public function feed()
+    {
+        return $this->statuses()
+                    ->orderBy('created_at', 'desc');
+    }
 }
